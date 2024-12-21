@@ -1,0 +1,62 @@
+[gd_scene load_steps=6 format=3 uid="uid://b2jww6ic036dt"]
+
+[ext_resource type="Script" path="res://mana_gatherer.gd" id="1_2ggf7"]
+[ext_resource type="Script" path="res://network_manager.gd" id="1_ayqjc"]
+[ext_resource type="Texture2D" uid="uid://c7p7u310lc1c2" path="res://icon.svg" id="2_hwstv"]
+[ext_resource type="Script" path="res://base.gd" id="3_vod66"]
+[ext_resource type="Script" path="res://turret.gd" id="5_lspe2"]
+
+[node name="Scene" type="Node2D"]
+
+[node name="NetworkManager" type="Node2D" parent="."]
+script = ExtResource("1_ayqjc")
+
+[node name="ManaGatherer" type="Node2D" parent="NetworkManager"]
+position = Vector2(242, 455)
+script = ExtResource("1_2ggf7")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="NetworkManager/ManaGatherer"]
+modulate = Color(0, 1, 1, 1)
+texture = ExtResource("2_hwstv")
+
+[node name="ManaGatherer2" type="Node2D" parent="NetworkManager"]
+position = Vector2(130, 290)
+script = ExtResource("1_2ggf7")
+mana_per_sec = 1
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="NetworkManager/ManaGatherer2"]
+modulate = Color(0, 1, 1, 1)
+texture = ExtResource("2_hwstv")
+
+[node name="Base" type="Node2D" parent="NetworkManager"]
+position = Vector2(521, 208)
+script = ExtResource("3_vod66")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="NetworkManager/Base"]
+modulate = Color(0.95, 0, 1, 1)
+rotation = 3.14159
+texture = ExtResource("2_hwstv")
+
+[node name="Label" type="Label" parent="NetworkManager/Base"]
+offset_left = -34.0
+offset_top = 63.0
+offset_right = 28.0
+offset_bottom = 86.0
+text = "Mana: 0"
+
+[node name="Turret" type="Node2D" parent="NetworkManager"]
+position = Vector2(830, 373)
+script = ExtResource("5_lspe2")
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="NetworkManager/Turret"]
+modulate = Color(0.906, 1, 0.06, 1)
+position = Vector2(0, -42)
+scale = Vector2(0.3, 1)
+texture = ExtResource("2_hwstv")
+
+[node name="ManaPoint" type="Marker2D" parent="NetworkManager/Turret"]
+position = Vector2(0, -96)

@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://pgkqsk0lvu1u"]
+
+[ext_resource type="Texture2D" uid="uid://c7p7u310lc1c2" path="res://icon.svg" id="1_bk0rb"]
+[ext_resource type="Script" path="res://mana_packet.gd" id="2_yxuwi"]
+
+[node name="ManaPacket" type="Sprite2D"]
+z_index = 1
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("1_bk0rb")
+script = ExtResource("2_yxuwi")
