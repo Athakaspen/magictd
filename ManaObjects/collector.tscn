@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4ptl6sx68udt"]
+
+[ext_resource type="Script" path="res://ManaObjects/collector.gd" id="1_dc5hh"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_slbwr"]
+top_radius = 0.001
+bottom_radius = 0.2
+height = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_670wc"]
+albedo_color = Color(0.13, 0.5215, 1, 1)
+
+[node name="Collector" type="Node3D"]
+script = ExtResource("1_dc5hh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+mesh = SubResource("CylinderMesh_slbwr")
+surface_material_override/0 = SubResource("StandardMaterial3D_670wc")
+
+[node name="ManaPoint" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)

@@ -1,0 +1,48 @@
+[gd_scene load_steps=8 format=3 uid="uid://cswtb4wuivl45"]
+
+[ext_resource type="Script" path="res://ManaObjects/network_manager.gd" id="1_b1ugw"]
+[ext_resource type="PackedScene" uid="uid://dytr4ag07ev5p" path="res://ManaObjects/relay.tscn" id="1_qnfrl"]
+[ext_resource type="PackedScene" uid="uid://c4ptl6sx68udt" path="res://ManaObjects/collector.tscn" id="3_mwmbo"]
+[ext_resource type="PackedScene" uid="uid://caprmog2457xr" path="res://ManaObjects/base.tscn" id="4_k8buu"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_cp66l"]
+size = Vector2(4, 4)
+
+[sub_resource type="Environment" id="Environment_budra"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_qcjm1"]
+
+[node name="ThreeDee" type="Node3D"]
+
+[node name="floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_cp66l")
+metadata/_edit_lock_ = true
+
+[node name="NetworkManager" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_b1ugw")
+
+[node name="Collector" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.152177, 0, 1.33313)
+
+[node name="Relay" parent="NetworkManager" instance=ExtResource("1_qnfrl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.606717, 1.19209e-07, -0.291601)
+
+[node name="Relay2" parent="NetworkManager" instance=ExtResource("1_qnfrl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.370209, -0.310152, 0.184706)
+
+[node name="Relay3" parent="NetworkManager" instance=ExtResource("1_qnfrl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.351199, 1.19209e-07, 0.870215)
+
+[node name="Base" parent="NetworkManager" instance=ExtResource("4_k8buu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.358596, 0.338548, -1.09108)
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.0765973, -0.219625, 0.972573, 0, 0.975439, 0.220272, -0.997062, 0.0168722, -0.0747159, 1.35421, 1.19574, 0.139089)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_budra")
+camera_attributes = SubResource("CameraAttributesPractical_qcjm1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.968274, 0, 0.24989, -0.242542, -0.240719, 0.939802, 0.0601533, -0.970595, -0.233082, 0.731981, 2.36595, -0.00254321)

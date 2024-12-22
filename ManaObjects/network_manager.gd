@@ -1,16 +1,19 @@
-extends Node2D
+extends Node3D
+class_name NetworkManager
 
 var providers : Array[AStarNode]
 var requesters : Array[AStarNode]
 
-var AStar := AStar2D.new()
-class AStarNode:
-	var id : int
-	var object : Node2D
-	var max_range : float
+var AStar := AStar3D.new()
 var id_to_node_map : Dictionary
 
-const packet_res = preload("res://mana_packet.tscn")
+const packet_res = preload("res://ManaObjects/mana_packet.tscn")
+
+func get_astar_node(id:int) -> AStarNode:
+	var result = id_to_node_map[id]
+	if id_to_node_map[id] == null:
+		push_error("Unknown ID!")
+	return result
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -18,26 +21,30 @@ func _ready():
 	AStar.reserve_space(len(children))
 	for child in children:
 		var node = create_astar_node(child)
-		if node.object.has_method("get_requested_mana"):
+		if node.obj.has_method("get_requested_mana"):
 			requesters.append(node)
-		if node.object.has_method("take_mana"):
+		if node.obj.has_method("take_mana"):
 			providers.append(node)
-	
-	print(AStar.get_id_path(1, 3))
-	AStar.add_point(4, Vector2(0,0))
-	print(AStar.get_id_path(1, 4))
 
 func create_astar_node(object) -> AStarNode:
 	var node = AStarNode.new()
 	node.id = AStar.get_available_point_id()
-	node.object = object
-	if ("max_link_range" in object):
-		node.max_range = object.max_link_range
-	else:
-		node.max_range = 10000
+	object.network_id = node.id
+	node.obj = object
 	id_to_node_map[node.id] = node
 	
-	AStar.add_point(node.id, node.object.global_position)
+	if ("max_range" in object):
+		node.max_range = object.max_range
+	else:
+		node.max_range = 10000
+	
+	var position
+	if "mana_transit_pos" in object:
+		position = object.mana_transit_pos
+	else:
+		position = object.global_position
+	node.pos = position
+	AStar.add_point(node.id, position)
 	link_objects_in_range(node)
 	return node
 
@@ -51,8 +58,6 @@ func link_objects_in_range(this : AStarNode):
 		if (other.id != this.id):
 			var dist_2 = AStar.get_point_position(this.id) \
 				.distance_squared_to(AStar.get_point_position(other.id))
-			if (this.id == 3):
-				pass
 			var max_range = min(this.max_range, other.max_range)
 			if (dist_2 < max_range * max_range):
 				AStar.connect_points(this.id, other.id)
@@ -64,21 +69,17 @@ func _process(_delta):
 	
 func process_requests():
 	for req in requesters:
-		if (req.object.get_requested_mana() > 0):
+		if (req.obj.get_requested_mana() > 0):
 			for prov in providers:
 				if !AStar.get_id_path(prov.id, req.id).is_empty():
-					if (prov.object.get_available_mana() > 0):
+					if (prov.obj.get_available_mana() > 0):
 						print(AStar.get_id_path(prov.id, req.id))
-						prov.object.take_mana(1)
+						prov.obj.take_mana(1)
 						send_packet(1, prov, req)
 
 func send_packet(amount, origin, destination):
 	var packet = packet_res.instantiate()
-	packet.position = origin.object.position
-	packet.mana_amount = amount
-	packet.speed = 300.0
-	var array : Array[Vector2]
-	array.assign(AStar.get_point_path(origin.id, destination.id))
-	packet.path_positions = array
-	packet.destination_receiver = destination.object
+	packet.setup_data(self, amount, AStar.get_id_path(origin.id, destination.id))
+	#packet.position = origin.pos
+	#packet.speed = 1.5
 	add_child(packet)

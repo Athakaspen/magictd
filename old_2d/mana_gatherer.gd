@@ -9,7 +9,6 @@ var wait_time := 1.0 / mana_per_sec
 func _ready():
 	pass # Replace with function body.
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	wait_time -= delta
