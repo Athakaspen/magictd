@@ -1,17 +1,18 @@
 extends Node3D
+class_name ManaPacket
 
 var network_manager : NetworkManager
 var mana_amount : int
-var speed : float = 1.5 # units per second
+var speed : float = 5 # units per second
 var destination_receiver : Object
 var path_ids : PackedInt64Array
 
 var cur_index : int = 0
 
-func setup_data(network_manager : NetworkManager, mana_amount : int, path_ids : PackedInt64Array):
-	self.network_manager = network_manager
-	self.mana_amount = mana_amount
-	self.path_ids = path_ids
+func setup_data(net_manager : NetworkManager, mana_amt : int, path_ids_packedarray : PackedInt64Array):
+	self.network_manager = net_manager
+	self.mana_amount = mana_amt
+	self.path_ids = path_ids_packedarray
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -34,5 +35,5 @@ func end_tween():
 	else:
 		var end_node : AStarNode = network_manager.get_astar_node(path_ids[-1])
 		end_node.obj.give_mana(mana_amount)
-		print("given")
+		#print("given")
 		self.queue_free()

@@ -1,22 +1,35 @@
-[gd_scene load_steps=4 format=3 uid="uid://c4ptl6sx68udt"]
+[gd_scene load_steps=5 format=3 uid="uid://c4ptl6sx68udt"]
 
 [ext_resource type="Script" path="res://ManaObjects/collector.gd" id="1_dc5hh"]
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_2gegd"]
+height = 0.5
+radius = 0.3
+
 [sub_resource type="CylinderMesh" id="CylinderMesh_slbwr"]
 top_radius = 0.001
-bottom_radius = 0.2
-height = 0.3
+bottom_radius = 0.4
+height = 0.6
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_670wc"]
 albedo_color = Color(0.13, 0.5215, 1, 1)
 
 [node name="Collector" type="Node3D"]
 script = ExtResource("1_dc5hh")
+max_range = 1.8
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.257471, 0)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("CylinderShape3D_2gegd")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 mesh = SubResource("CylinderMesh_slbwr")
 surface_material_override/0 = SubResource("StandardMaterial3D_670wc")
 
 [node name="ManaPoint" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)

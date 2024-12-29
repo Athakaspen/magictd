@@ -1,12 +1,28 @@
-[gd_scene load_steps=8 format=3 uid="uid://cswtb4wuivl45"]
+[gd_scene load_steps=16 format=3 uid="uid://cswtb4wuivl45"]
 
 [ext_resource type="Script" path="res://ManaObjects/network_manager.gd" id="1_b1ugw"]
-[ext_resource type="PackedScene" uid="uid://dytr4ag07ev5p" path="res://ManaObjects/relay.tscn" id="1_qnfrl"]
+[ext_resource type="Script" path="res://debug_lines.gd" id="2_ikf1a"]
 [ext_resource type="PackedScene" uid="uid://c4ptl6sx68udt" path="res://ManaObjects/collector.tscn" id="3_mwmbo"]
 [ext_resource type="PackedScene" uid="uid://caprmog2457xr" path="res://ManaObjects/base.tscn" id="4_k8buu"]
+[ext_resource type="PackedScene" uid="uid://bqjkvixbtqbcp" path="res://ManaObjects/Turret.tscn" id="5_emtnl"]
+[ext_resource type="PackedScene" uid="uid://drasq2nfn6vs5" path="res://player_character.tscn" id="5_i2pwt"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v182q"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_2wi22"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_2iamr"]
+size = Vector3(20, 1, 20)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_cp66l"]
-size = Vector2(4, 4)
+size = Vector2(20, 20)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o0vqj"]
+size = Vector3(0.352539, 2.78699, 2.00598)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bxsi4"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_sr5sw"]
 
 [sub_resource type="Environment" id="Environment_budra"]
 
@@ -14,31 +30,111 @@ size = Vector2(4, 4)
 
 [node name="ThreeDee" type="Node3D"]
 
-[node name="floor" type="MeshInstance3D" parent="."]
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="capsule" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 0.896996, -0.442038, 0, 0.442038, 0.896996, 1.57671, -0.177396, -1.79953)
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/capsule"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CapsuleShape3D_v182q")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/capsule"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CapsuleMesh_2wi22")
+
+[node name="Floor" type="StaticBody3D" parent="Geometry"]
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_2iamr")
+
+[node name="floor" type="MeshInstance3D" parent="Geometry/Floor"]
 mesh = SubResource("PlaneMesh_cp66l")
+skeleton = NodePath("../../..")
 metadata/_edit_lock_ = true
+
+[node name="wall" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(0.640472, 0, -0.767982, 0, 1, 0, 0.767982, 0, 0.640472, 1.87478, 0.0136595, 0.631075)
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/wall"]
+shape = SubResource("BoxShape3D_o0vqj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/wall/CollisionShape3D"]
+transform = Transform3D(0.360113, 0, 0, 0, 2.76053, 0, 0, 0, 1.97356, 0, 0, 0)
+mesh = SubResource("BoxMesh_bxsi4")
+
+[node name="wall2" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(0.958238, 0, 0.285973, 0, 1, 0, -0.285973, 0, 0.958238, 0.970902, 0.0144196, 3.83356)
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/wall2"]
+shape = SubResource("BoxShape3D_o0vqj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/wall2/CollisionShape3D"]
+transform = Transform3D(0.360113, 0, 0, 0, 2.76053, 0, 0, 0, 1.97356, 0, 0, 0)
+mesh = SubResource("BoxMesh_bxsi4")
+
+[node name="wall3" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(0.978426, 0, -0.206597, 0, 1, 0, 0.206597, 0, 0.978426, 0.959101, 0.0144196, 2.08326)
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/wall3"]
+shape = SubResource("BoxShape3D_o0vqj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/wall3/CollisionShape3D"]
+transform = Transform3D(0.360113, 0, 0, 0, 2.76053, 0, 0, 0, 1.97356, 0, 0, 0)
+mesh = SubResource("BoxMesh_bxsi4")
 
 [node name="NetworkManager" type="Node3D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_b1ugw")
 
+[node name="DebugLines" type="MeshInstance3D" parent="NetworkManager"]
+mesh = SubResource("ImmediateMesh_sr5sw")
+skeleton = NodePath("")
+script = ExtResource("2_ikf1a")
+
 [node name="Collector" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.152177, 0, 1.33313)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.08232, -0.0801492, 3.70988)
+mana_per_sec = 5
 
-[node name="Relay" parent="NetworkManager" instance=ExtResource("1_qnfrl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.606717, 1.19209e-07, -0.291601)
+[node name="Collector2" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.73623, -0.0801492, 2.01655)
+mana_per_sec = 5
 
-[node name="Relay2" parent="NetworkManager" instance=ExtResource("1_qnfrl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.370209, -0.310152, 0.184706)
+[node name="Collector3" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12408, -0.0801492, 4.2759)
+mana_per_sec = 5
 
-[node name="Relay3" parent="NetworkManager" instance=ExtResource("1_qnfrl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.351199, 1.19209e-07, 0.870215)
+[node name="Collector4" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.27943, -0.0801494, 3.27528)
+mana_per_sec = 5
+
+[node name="Collector5" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.78403, -0.0801494, -3.49973)
+mana_per_sec = 5
 
 [node name="Base" parent="NetworkManager" instance=ExtResource("4_k8buu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.358596, 0.338548, -1.09108)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.76195, 0, -2.91592)
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(-0.0765973, -0.219625, 0.972573, 0, 0.975439, 0.220272, -0.997062, 0.0168722, -0.0747159, 1.35421, 1.19574, 0.139089)
+[node name="Turret" parent="NetworkManager" instance=ExtResource("5_emtnl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.08867, 0, -5.94962)
+
+[node name="Turret2" parent="NetworkManager" instance=ExtResource("5_emtnl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.83043, 0, -6.10766)
+
+[node name="Turret3" parent="NetworkManager" instance=ExtResource("5_emtnl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.44002, 0, -6.83861)
+
+[node name="PlayerCharacter" parent="." node_paths=PackedStringArray("network_manager") instance=ExtResource("5_i2pwt")]
+network_manager = NodePath("../NetworkManager")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_budra")

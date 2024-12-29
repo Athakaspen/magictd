@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://delk7mqpavidd"]
+
+[ext_resource type="Script" path="res://ManaObjects/mana_label.gd" id="1_00u0h"]
+
+[node name="Mana Label" type="Label3D"]
+billboard = 1
+text = "Mana: 0"
+script = ExtResource("1_00u0h")

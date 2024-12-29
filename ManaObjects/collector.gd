@@ -1,7 +1,5 @@
-extends Node3D
-
-@export var max_range : float = 0.8
-var network_id : int
+extends ManaObject
+class_name ManaCollector
 
 @export var mana_per_sec := 2
 var max_mana : int = 1

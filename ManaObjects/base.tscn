@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://caprmog2457xr"]
+[gd_scene load_steps=8 format=3 uid="uid://caprmog2457xr"]
 
 [ext_resource type="Script" path="res://ManaObjects/base.gd" id="1_qps8e"]
+[ext_resource type="PackedScene" uid="uid://delk7mqpavidd" path="res://mana_label.tscn" id="2_jq3k8"]
 
 [sub_resource type="TorusMesh" id="TorusMesh_hcqu0"]
 inner_radius = 0.193
@@ -96,21 +97,21 @@ _data = {
 }
 
 [node name="Base" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.338548, 0)
 script = ExtResource("1_qps8e")
+max_range = 1.8
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, -1.36183e-07, 0, 1.36183e-07, 1, 0, 0, 0)
+transform = Transform3D(2, 0, 0, 0, 2, -2.72366e-07, 0, 2.72366e-07, 2, 0, 0.751423, 0)
 mesh = SubResource("TorusMesh_hcqu0")
 surface_material_override/0 = SubResource("StandardMaterial3D_g2kf1")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0.751423, 0)
 mesh = SubResource("TorusMesh_hcqu0")
 surface_material_override/0 = SubResource("StandardMaterial3D_g2kf1")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, -6.80916e-08, -3.63452e-15, 6.80916e-08, 1, -6.80916e-08, 8.27098e-15, 6.80916e-08, 1, 0, 0, 0)
+transform = Transform3D(2, -1.36183e-07, -7.26904e-15, 1.36183e-07, 2, -1.36183e-07, 1.6542e-14, 1.36183e-07, 2, 0, 0.751423, 0)
 mesh = SubResource("TorusMesh_hcqu0")
 surface_material_override/0 = SubResource("StandardMaterial3D_g2kf1")
 
@@ -121,3 +122,7 @@ libraries = {
 autoplay = "speen"
 
 [node name="ManaPoint" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.751423, 0)
+
+[node name="Mana Label" parent="." instance=ExtResource("2_jq3k8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.3132, 0)
