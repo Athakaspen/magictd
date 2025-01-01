@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://caprmog2457xr"]
 
 [ext_resource type="Script" path="res://ManaObjects/base.gd" id="1_qps8e"]
-[ext_resource type="PackedScene" uid="uid://delk7mqpavidd" path="res://mana_label.tscn" id="2_jq3k8"]
+[ext_resource type="PackedScene" uid="uid://delk7mqpavidd" path="res://Helpers/mana_label.tscn" id="2_jq3k8"]
 
 [sub_resource type="TorusMesh" id="TorusMesh_hcqu0"]
 inner_radius = 0.193

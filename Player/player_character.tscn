@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://drasq2nfn6vs5"]
 
-[ext_resource type="Script" path="res://player_character.gd" id="1_fgemk"]
-[ext_resource type="Script" path="res://object_placer.gd" id="2_ob7jd"]
+[ext_resource type="Script" path="res://Player/player_character.gd" id="1_fgemk"]
+[ext_resource type="Script" path="res://Player/object_placer.gd" id="2_ob7jd"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dvg6s"]
 radius = 0.4

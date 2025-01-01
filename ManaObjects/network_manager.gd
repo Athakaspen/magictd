@@ -105,21 +105,23 @@ func sort_time(a : AStarNode, b : AStarNode):
 
 func process_requests():
 	requesters.sort_custom(sort_time)
-	for req in requesters:
-		if (req.obj.get_requested_mana() > 0):
+	for req : AStarNode in requesters:
+		if (req.obj.get_requested_mana() - req.mana_en_route > 0):
 			#providers.sort_custom(sort_time)
-			for prov in providers:
-				if !AStar.get_id_path(prov.id, req.id).is_empty():
+			for prov : AStarNode in providers:
+				if req != prov and !AStar.get_id_path(prov.id, req.id).is_empty():
 					if (prov.obj.get_available_mana() > 0):
 						#print(AStar.get_id_path(prov.id, req.id))
-						prov.obj.take_mana(1)
 						send_packet(1, prov, req)
-						req.last_used_time = Time.get_unix_time_from_system()
-						prov.last_used_time = Time.get_unix_time_from_system()
+						# whether to continue checking this requester
+						if not (req.obj.get_requested_mana() - req.mana_en_route > 0):
+							break
 
-func send_packet(amount, origin, destination):
+func send_packet(amount : int, origin : AStarNode, destination : AStarNode):
+	origin.obj.take_mana(amount)
 	var packet = packet_res.instantiate()
 	packet.setup_data(self, amount, AStar.get_id_path(origin.id, destination.id))
-	#packet.position = origin.pos
-	#packet.speed = 1.5
 	add_child(packet)
+	origin.last_used_time = Time.get_unix_time_from_system()
+	destination.last_used_time = Time.get_unix_time_from_system()
+	destination.mana_en_route += amount

@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Layers="*res://layers.gd"
+Layers="*res://Helpers/layers.gd"
 
 [input]
 
@@ -70,6 +70,7 @@ place_item={
 [layer_names]
 
 3d_physics/layer_1="Geometry"
-3d_physics/layer_2="Objects"
+3d_physics/layer_2="Object"
 3d_physics/layer_3="Player"
 3d_physics/layer_4="Enemy"
+3d_physics/layer_5="Projectile"

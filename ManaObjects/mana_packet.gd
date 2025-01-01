@@ -37,3 +37,9 @@ func end_tween():
 		end_node.obj.give_mana(mana_amount)
 		#print("given")
 		self.queue_free()
+
+# Remove mana from en_route var when deleted
+func _exit_tree():
+	var dest = network_manager.get_astar_node(path_ids[-1])
+	if dest != null:
+		dest.mana_en_route -= mana_amount
