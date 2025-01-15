@@ -98,7 +98,7 @@ _data = {
 
 [node name="Base" type="Node3D"]
 script = ExtResource("1_qps8e")
-max_range = 1.8
+max_range = 2.8
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(2, 0, 0, 0, 2, -2.72366e-07, 0, 2.72366e-07, 2, 0, 0.751423, 0)

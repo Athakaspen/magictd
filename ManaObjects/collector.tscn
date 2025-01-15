@@ -16,7 +16,7 @@ albedo_color = Color(0.13, 0.5215, 1, 1)
 
 [node name="Collector" type="Node3D"]
 script = ExtResource("1_dc5hh")
-max_range = 1.8
+max_range = 2.5
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.257471, 0)

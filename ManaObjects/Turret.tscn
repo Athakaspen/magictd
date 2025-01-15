@@ -79,8 +79,8 @@ radius = 4.0
 
 [node name="Turret" type="Node3D"]
 script = ExtResource("1_a0jci")
-max_mana = 10
-max_range = 2.0
+max_mana = 20
+max_range = 2.5
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
@@ -115,6 +115,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.03361, 1.62534, 0.197098)
 
 [node name="RangeVisualizer" type="MeshInstance3D" parent="."]
 transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 1.20829, 0)
+visible = false
 mesh = SubResource("SphereMesh_ycw6e")
 surface_material_override/0 = SubResource("StandardMaterial3D_the31")
 script = SubResource("GDScript_m7xe7")

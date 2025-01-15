@@ -12,6 +12,8 @@ var id_to_node_map : Dictionary
 const base_res = preload("res://ManaObjects/base.tscn")
 const relay_res = preload("res://ManaObjects/relay.tscn")
 const collector_res = preload("res://ManaObjects/collector.tscn")
+const turret_res = preload("res://ManaObjects/Turret.tscn")
+
 const packet_res = preload("res://ManaObjects/mana_packet.tscn")
 
 func get_astar_node(id:int) -> AStarNode:
@@ -34,21 +36,24 @@ func _ready():
 
 func add_mana_object(type, new_pos : Vector3):
 	var new_obj : Node3D
-	if (type == ManaBase):
-		new_obj = base_res.instantiate()
-	elif (type == ManaRelay):
-		new_obj = relay_res.instantiate()
-	elif (type == ManaCollector):
-		new_obj = collector_res.instantiate()
-	else:
-		push_error("Expected a mana object!")
+	match(type):
+		ManaBase:
+			new_obj = base_res.instantiate()
+		ManaRelay:
+			new_obj = relay_res.instantiate()
+		ManaCollector:
+			new_obj = collector_res.instantiate()
+		ManaTurret:
+			new_obj = turret_res.instantiate()
+		_:
+			push_error("Expected a mana object!")
 	new_obj.position = new_pos
 	add_child(new_obj)
 	var node = create_astar_node(new_obj)
 	if node.obj.has_method("get_requested_mana"):
-		requesters.append(new_obj)
+		requesters.append(node)
 	if node.obj.has_method("take_mana"):
-		providers.append(new_obj)
+		providers.append(node)
 
 func create_astar_node(object) -> AStarNode:
 	var node = AStarNode.new()
@@ -125,3 +130,9 @@ func send_packet(amount : int, origin : AStarNode, destination : AStarNode):
 	origin.last_used_time = Time.get_unix_time_from_system()
 	destination.last_used_time = Time.get_unix_time_from_system()
 	destination.mana_en_route += amount
+
+func get_base_mana() -> int:
+	return %Base.cur_mana
+
+func take_base_mana(amt: int):
+	%Base.cur_mana -= amt

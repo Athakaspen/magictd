@@ -1,7 +1,25 @@
-[gd_scene load_steps=7 format=3 uid="uid://drasq2nfn6vs5"]
+[gd_scene load_steps=11 format=3 uid="uid://drasq2nfn6vs5"]
 
 [ext_resource type="Script" path="res://Player/player_character.gd" id="1_fgemk"]
 [ext_resource type="Script" path="res://Player/object_placer.gd" id="2_ob7jd"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_80ats"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g83rv"]
+transparency = 1
+albedo_color = Color(0.5, 0, 0, 0.694118)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_m5fcd"]
+top_radius = 0.18
+bottom_radius = 0.05
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n3fv2"]
+transparency = 1
+albedo_color = Color(0.48, 0.43456, 0.1392, 0.768627)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dvg6s"]
 radius = 0.4
@@ -25,6 +43,20 @@ script = ExtResource("1_fgemk")
 
 [node name="ObjectPlacer" type="Node3D" parent="."]
 script = ExtResource("2_ob7jd")
+
+[node name="preview" type="Node3D" parent="ObjectPlacer"]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, -0.830505)
+
+[node name="relay" type="MeshInstance3D" parent="ObjectPlacer/preview"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("CylinderMesh_80ats")
+skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_g83rv")
+
+[node name="turret" type="MeshInstance3D" parent="ObjectPlacer/preview"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+mesh = SubResource("CylinderMesh_m5fcd")
+surface_material_override/0 = SubResource("StandardMaterial3D_n3fv2")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

@@ -1,13 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://cswtb4wuivl45"]
+[gd_scene load_steps=19 format=3 uid="uid://cswtb4wuivl45"]
 
 [ext_resource type="Script" path="res://ManaObjects/network_manager.gd" id="1_b1ugw"]
 [ext_resource type="Script" path="res://Helpers/debug_lines.gd" id="2_ikf1a"]
 [ext_resource type="PackedScene" uid="uid://c4ptl6sx68udt" path="res://ManaObjects/collector.tscn" id="3_mwmbo"]
 [ext_resource type="PackedScene" uid="uid://caprmog2457xr" path="res://ManaObjects/base.tscn" id="4_k8buu"]
-[ext_resource type="PackedScene" uid="uid://bqjkvixbtqbcp" path="res://ManaObjects/Turret.tscn" id="5_emtnl"]
 [ext_resource type="PackedScene" uid="uid://drasq2nfn6vs5" path="res://Player/player_character.tscn" id="5_i2pwt"]
-[ext_resource type="PackedScene" uid="uid://dytr4ag07ev5p" path="res://ManaObjects/relay.tscn" id="6_g7ssb"]
-[ext_resource type="PackedScene" uid="uid://dxptckeeie8yw" path="res://Enemies/enemy.tscn" id="8_r4sc1"]
+[ext_resource type="Script" path="res://enemy_spawner.gd" id="8_mp0y0"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2iamr"]
 size = Vector3(50, 1, 50)
@@ -29,6 +27,20 @@ size = Vector3(0.352539, 2.78699, 2.00598)
 [sub_resource type="Environment" id="Environment_budra"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_qcjm1"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_v5pfk"]
+size = Vector3(2, 1.5, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h6soq"]
+albedo_color = Color(0.48461, 0.69, 0.0414, 1)
+
+[sub_resource type="GDScript" id="GDScript_o8bm0"]
+script/source = "extends Label
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	text = \"Mana: \" + str(%Base.cur_mana) + \"/\" + str(Singleton.cur_cost)
+"
 
 [node name="ThreeDee" type="Node3D"]
 
@@ -103,6 +115,11 @@ mesh = SubResource("ImmediateMesh_sr5sw")
 skeleton = NodePath("")
 script = ExtResource("2_ikf1a")
 
+[node name="Base" parent="NetworkManager" instance=ExtResource("4_k8buu")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.76195, 0, -2.91592)
+max_mana = 100
+
 [node name="Collector" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.08232, -0.0801492, 3.70988)
 mana_per_sec = 1
@@ -128,49 +145,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.78403, -0.0801494, -3.4997
 mana_per_sec = 1
 SEND_COOLTIME = 0.1
 
-[node name="Base" parent="NetworkManager" instance=ExtResource("4_k8buu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.76195, 0, -2.91592)
-max_mana = 100
-
-[node name="Turret" parent="NetworkManager" instance=ExtResource("5_emtnl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.08867, 0, -5.94962)
-max_mana = 20
-fire_rate_per_sec = 2.0
-
-[node name="Turret2" parent="NetworkManager" instance=ExtResource("5_emtnl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.83043, 0, -6.10766)
-max_mana = 20
-fire_rate_per_sec = 2.0
-
-[node name="Turret3" parent="NetworkManager" instance=ExtResource("5_emtnl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.44002, 0, -6.83861)
-max_mana = 20
-fire_rate_per_sec = 2.0
-
-[node name="Relay" parent="NetworkManager" instance=ExtResource("6_g7ssb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.07081, -0.00012207, -5.38456)
-
-[node name="Relay2" parent="NetworkManager" instance=ExtResource("6_g7ssb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125653, -0.00012207, -4.77209)
-
-[node name="Relay3" parent="NetworkManager" instance=ExtResource("6_g7ssb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.39026, -0.00012207, -3.92701)
-
-[node name="Relay4" parent="NetworkManager" instance=ExtResource("6_g7ssb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1875, -0.00012207, -2.22592)
-
-[node name="Relay5" parent="NetworkManager" instance=ExtResource("6_g7ssb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.98994, -0.00012207, -0.368907)
-
-[node name="Relay6" parent="NetworkManager" instance=ExtResource("6_g7ssb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.29847, -0.00012207, 1.45862)
-
-[node name="Relay7" parent="NetworkManager" instance=ExtResource("6_g7ssb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.53557, -0.00012207, 3.24633)
-
-[node name="Relay9" parent="NetworkManager" instance=ExtResource("6_g7ssb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.21796, -0.00012207, -3.86561)
-
 [node name="PlayerCharacter" parent="." node_paths=PackedStringArray("network_manager") instance=ExtResource("5_i2pwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.248349, 4.76837e-07, -1.88345)
 collision_mask = 1
@@ -186,22 +160,25 @@ transform = Transform3D(0.968274, 0, 0.24989, -0.242542, -0.240719, 0.939802, 0.
 [node name="Spawner" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05433, 1.66819, -17.7436)
 
-[node name="Enemy" parent="." node_paths=PackedStringArray("target_node") instance=ExtResource("8_r4sc1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.56673, 0.605982, -21.0895)
-target_node = NodePath("../PlayerCharacter")
+[node name="EnemySpawner" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9998, 0, -19.7786)
+script = ExtResource("8_mp0y0")
 
-[node name="Enemy2" parent="." node_paths=PackedStringArray("target_node") instance=ExtResource("8_r4sc1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.274615, 0.605982, -22.9825)
-target_node = NodePath("../PlayerCharacter")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="EnemySpawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.893476, 0)
+mesh = SubResource("PrismMesh_v5pfk")
+surface_material_override/0 = SubResource("StandardMaterial3D_h6soq")
 
-[node name="Enemy3" parent="." node_paths=PackedStringArray("target_node") instance=ExtResource("8_r4sc1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.27371, 0.605982, -21.6416)
-target_node = NodePath("../PlayerCharacter")
+[node name="Marker3D" type="Marker3D" parent="EnemySpawner"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.540112, 0)
 
-[node name="Enemy4" parent="." node_paths=PackedStringArray("target_node") instance=ExtResource("8_r4sc1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.66719, 0.605982, -23.0351)
-target_node = NodePath("../PlayerCharacter")
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Enemy5" parent="." node_paths=PackedStringArray("target_node") instance=ExtResource("8_r4sc1")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.32449, 0.605982, -21.1158)
-target_node = NodePath("../PlayerCharacter")
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 35.0
+offset_top = 577.0
+offset_right = 139.0
+offset_bottom = 622.0
+theme_override_font_sizes/font_size = 32
+text = "Mana: "
+script = SubResource("GDScript_o8bm0")
