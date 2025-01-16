@@ -10,8 +10,8 @@ func _process(_delta):
 		var AStar = network_manager.AStar
 		
 		# If no change, skip updating
-		if num_points == AStar.get_point_count():
-			return
+		#if num_points == AStar.get_point_count():
+			#return
 		num_points = AStar.get_point_count()
 		
 		# Draw

@@ -10,7 +10,7 @@ height = 1.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g83rv"]
 transparency = 1
-albedo_color = Color(0.5, 0, 0, 0.694118)
+albedo_color = Color(0.5, 0, 0, 0.486275)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_m5fcd"]
 top_radius = 0.18
@@ -19,7 +19,7 @@ height = 1.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n3fv2"]
 transparency = 1
-albedo_color = Color(0.48, 0.43456, 0.1392, 0.768627)
+albedo_color = Color(0.48, 0.43456, 0.1392, 0.611765)
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dvg6s"]
 radius = 0.4
@@ -57,6 +57,9 @@ surface_material_override/0 = SubResource("StandardMaterial3D_g83rv")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 mesh = SubResource("CylinderMesh_m5fcd")
 surface_material_override/0 = SubResource("StandardMaterial3D_n3fv2")
+
+[node name="temp_mana_point" type="Marker3D" parent="ObjectPlacer/preview"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.20151, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)

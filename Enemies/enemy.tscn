@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://dxptckeeie8yw"]
+[gd_scene load_steps=7 format=3 uid="uid://dxptckeeie8yw"]
 
 [ext_resource type="Script" path="res://Enemies/enemy.gd" id="1_pxdjm"]
 
@@ -16,8 +16,10 @@ albedo_color = Color(0.0576, 0.64, 0.280853, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_rqons"]
 size = Vector3(0.3, 0.1, 0.3)
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_v7qe1"]
+radius = 3.0
+
 [node name="Enemy" type="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.38088, 0.605982, -12.8075)
 collision_layer = 8
 collision_mask = 5
 script = ExtResource("1_pxdjm")
@@ -32,3 +34,10 @@ surface_material_override/0 = SubResource("StandardMaterial3D_chuy4")
 [node name="visor" type="MeshInstance3D" parent="."]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, -0.000687361, 0.22109, -0.19421)
 mesh = SubResource("BoxMesh_rqons")
+
+[node name="TargetingArea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="TargetingArea"]
+shape = SubResource("SphereShape3D_v7qe1")

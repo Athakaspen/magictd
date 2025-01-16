@@ -1,7 +1,7 @@
 extends Node3D
 
-var seconds_between_spawns := 9.0
-var random_shift := 5.0
+var seconds_between_spawns := 1.0
+var random_shift := 1.0
 
 var time_til_next_spawn := seconds_between_spawns + random_shift
 
@@ -20,7 +20,7 @@ func _process(delta):
 
 func spawn():
 	var enemy = enemy_res.instantiate()
-	enemy.target_node = %Base
+	enemy.mana_base = %Base
 	get_parent().add_child(enemy)
-	var position = $Marker3D.global_position + Vector3.FORWARD.rotated(Vector3.UP, randf_range(0.0, 6.28)) * 2.5
-	enemy.global_position = position
+	var pos = $Marker3D.global_position + Vector3.FORWARD.rotated(Vector3.UP, randf_range(0.0, 6.28)) * 2.5
+	enemy.global_position = pos

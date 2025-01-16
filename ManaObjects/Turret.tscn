@@ -68,7 +68,7 @@ albedo_color = Color(0.46, 0.982, 1, 0.188235)
 script/source = "@tool
 extends MeshInstance3D
 
-func _process(delta):
+func _process(_delta):
 	#if Engine.is_editor_hint():
 	if \"fire_range\" in $\"..\":
 		scale = Vector3.ONE * $\"..\".fire_range * 2

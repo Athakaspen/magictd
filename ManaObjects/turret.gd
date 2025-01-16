@@ -1,6 +1,7 @@
 extends ManaObject
 class_name ManaTurret
 
+@export var cost : int = 10
 @onready var mana_transit_pos = $ManaPoint.global_position
 @export var max_mana := 100
 var cur_mana := 0
@@ -24,7 +25,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	fire_cooldown -= delta
-	if fire_cooldown <= 0 and cur_mana > fire_cost:
+	if fire_cooldown <= 0 and cur_mana >= fire_cost:
 		# acquire target
 		var targets = range_area.get_overlapping_bodies()
 		if not targets.is_empty():

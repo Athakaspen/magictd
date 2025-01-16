@@ -4,6 +4,8 @@ class_name NetworkManager
 var providers : Array[AStarNode]
 var requesters : Array[AStarNode]
 
+var placement_point_id : int = 0
+
 var AStar := AStar3D.new()
 var id_to_node_map : Dictionary
 
@@ -24,8 +26,9 @@ func get_astar_node(id:int) -> AStarNode:
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	AStar.add_point(placement_point_id, Vector3.ZERO)
+	AStar.set_point_disabled(placement_point_id, true)
 	var children = get_children()
-	#AStar.reserve_space(len(children))
 	for child in children:
 		if child is ManaObject:
 			var node = create_astar_node(child)
@@ -136,3 +139,23 @@ func get_base_mana() -> int:
 
 func take_base_mana(amt: int):
 	%Base.cur_mana -= amt
+
+func update_placement_point(pos: Vector3):
+	AStar.set_point_position(placement_point_id, pos)
+	for id in AStar.get_point_ids():
+		if id == placement_point_id: continue
+		var p_other = AStar.get_point_position(id)
+		var dist_2 = pos.distance_squared_to(p_other)
+		var max_range = min(Singleton.cur_range * 0.98, get_astar_node(id).max_range)
+		if (dist_2 < max_range * max_range):
+			# collision check
+			var space_state = get_world_3d().direct_space_state
+			var raycast = PhysicsRayQueryParameters3D.create(p_other, pos, Layers.GEOMETRY_LAYER + Layers.OBJECT_LAYER)
+			var collision = space_state.intersect_ray(raycast)
+			if !collision:
+				AStar.connect_points(placement_point_id, id)
+			else:
+				AStar.disconnect_points(placement_point_id, id)
+		else:
+			AStar.disconnect_points(placement_point_id, id)
+		
