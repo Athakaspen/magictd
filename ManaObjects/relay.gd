@@ -9,3 +9,7 @@ class_name ManaRelay
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass
+
+func on_hit(_damage):
+	Singleton.network_manager.remove_mana_object(self)
+	self.queue_free()

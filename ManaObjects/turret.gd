@@ -45,6 +45,12 @@ func shoot_at(target : Node3D):
 	fire_cooldown = 1.0 / fire_rate_per_sec
 	shots_fired += 1
 
+func on_hit(damage:int):
+	cur_mana -= damage
+	if cur_mana <= -10:
+		Singleton.network_manager.remove_mana_object(self)
+		self.queue_free()
+
 func get_requested_mana() -> int:
 	return max_mana - cur_mana
 

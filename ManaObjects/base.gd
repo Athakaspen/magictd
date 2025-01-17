@@ -8,9 +8,6 @@ class_name ManaBase
 var cur_mana := 0
 
 var send_cooldown_time : float = 0
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
 
 var time_to_next_mana = 1.0 / innate_mana_per_sec
 func _process(delta):
@@ -27,7 +24,7 @@ func get_requested_mana() -> int:
 func give_mana(amount : int):
 	cur_mana += amount
 
-# Provider functions
+# Provider functions (disabled)
 func get_available_mana() -> int:
 	if send_cooldown_time > 0: return 0
 	return cur_mana
@@ -39,3 +36,10 @@ func _take_mana(amount):
 	cur_mana -= amount
 	mana_sent_count += amount
 	send_cooldown_time = 1.0 / mana_out_per_sec
+
+func on_hit(damage:int):
+	cur_mana -= damage
+	if cur_mana <= 0:
+		print("Game Over!")
+		#Singleton.network_manager.remove_mana_object(self)
+		#self.queue_free()

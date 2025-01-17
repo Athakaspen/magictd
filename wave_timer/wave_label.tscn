@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://c8r0ibs0juxkb"]
+
+[node name="Label" type="Label"]
+z_index = 10
+offset_left = 16.0
+offset_top = 8.0
+offset_right = 127.0
+offset_bottom = 53.0
+theme_override_font_sizes/font_size = 32
+text = "Wave 1"

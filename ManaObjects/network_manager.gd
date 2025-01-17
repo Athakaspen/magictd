@@ -19,13 +19,12 @@ const turret_res = preload("res://ManaObjects/Turret.tscn")
 const packet_res = preload("res://ManaObjects/mana_packet.tscn")
 
 func get_astar_node(id:int) -> AStarNode:
-	var result = id_to_node_map[id]
-	if id_to_node_map[id] == null:
-		push_error("Unknown ID!")
+	var result = id_to_node_map.get(id)
 	return result
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	Singleton.network_manager = self
 	AStar.add_point(placement_point_id, Vector3.ZERO)
 	AStar.set_point_disabled(placement_point_id, true)
 	var children = get_children()
@@ -57,6 +56,13 @@ func add_mana_object(type, new_pos : Vector3):
 		requesters.append(node)
 	if node.obj.has_method("take_mana"):
 		providers.append(node)
+
+func remove_mana_object(object: ManaObject):
+	var node = get_astar_node(object.network_id)
+	AStar.remove_point(node.id)
+	requesters.erase(node)
+	providers.erase(node)
+	id_to_node_map.erase(node.id)
 
 func create_astar_node(object) -> AStarNode:
 	var node = AStarNode.new()

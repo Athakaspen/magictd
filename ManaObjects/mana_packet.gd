@@ -23,10 +23,13 @@ func _ready():
 
 func tween_to_next_position():
 	var next_node : AStarNode = network_manager.get_astar_node(path_ids[cur_index])
-	var dist : float = position.distance_to(next_node.pos)
-	var tween = create_tween()
-	tween.tween_property(self, "position", next_node.pos, dist / speed)
-	tween.tween_callback(end_tween)
+	if next_node == null:
+		self.queue_free()
+	else:
+		var dist : float = position.distance_to(next_node.pos)
+		var tween = create_tween()
+		tween.tween_property(self, "position", next_node.pos, dist / speed)
+		tween.tween_callback(end_tween)
 
 func end_tween():
 	cur_index += 1
@@ -34,8 +37,8 @@ func end_tween():
 		tween_to_next_position()
 	else:
 		var end_node : AStarNode = network_manager.get_astar_node(path_ids[-1])
-		end_node.obj.give_mana(mana_amount)
-		#print("given")
+		if end_node != null:
+			end_node.obj.give_mana(mana_amount)
 		self.queue_free()
 
 # Remove mana from en_route var when deleted

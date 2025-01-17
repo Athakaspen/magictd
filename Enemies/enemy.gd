@@ -3,20 +3,32 @@ extends CharacterBody3D
 @export var mana_base : ManaBase
 var target_node : Node3D
 
-const SPEED = 1
-const ROT_SPEED = 3.0
+@export var SPEED = 0.5
+@export var ROT_SPEED = 3.0
 const JUMP_VELOCITY = 4.5
 
-const STOP_DISTANCE : float = 1
-const MAX_HP : float = 50
+const STOP_DISTANCE : float = 0.75
+@export var MAX_HP : float = 50
 
 const RETARGET_TIME = 0.59 # seconds
 var time_to_next_retarget = RETARGET_TIME
+
+@export var ATTACK_DAMAGE : int = 2
+@export var ATTACK_TIME : float = 2.0
+@onready var time_to_next_attack = ATTACK_TIME
 
 var hp = MAX_HP
 
 func _ready():
 	retarget()
+
+func _process(delta):
+	time_to_next_retarget -= delta
+	if time_to_next_retarget <= 0:
+		retarget()
+		time_to_next_retarget = RETARGET_TIME
+	
+	time_to_next_attack -= delta
 
 func retarget():
 	var bodies : Array[Node3D] = $TargetingArea.get_overlapping_bodies()
@@ -57,6 +69,8 @@ func _physics_process(delta):
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	
+	if target_node == null:
+		retarget()
 	var vector_to_target = target_node.position - self.position
 	vector_to_target.y = 0 # remove vertical difference
 	var direction = vector_to_target.normalized()
@@ -68,17 +82,19 @@ func _physics_process(delta):
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
 	else:
+		# arrived at target
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
+		if time_to_next_attack <= 0:
+			attack()
+			time_to_next_attack = ATTACK_TIME
 	move_and_slide()
-	
-	time_to_next_retarget -= delta
-	if time_to_next_retarget <= 0:
-		retarget()
-		print(target_node)
-		time_to_next_retarget = RETARGET_TIME
 
 func on_hit(damage: float):
 	hp -= damage
 	if hp <= 0:
 		self.queue_free()
+
+func attack():
+	if "on_hit" in target_node:
+		target_node.on_hit(ATTACK_DAMAGE)

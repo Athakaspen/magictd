@@ -1,7 +1,7 @@
 extends Node3D
 
-var seconds_between_spawns := 1.0
-var random_shift := 1.0
+@export var seconds_between_spawns := 1.0
+@export var random_shift := 1.0
 
 var time_til_next_spawn := seconds_between_spawns + random_shift
 

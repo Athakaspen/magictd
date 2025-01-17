@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://balt8aperorbs"]
+
+[ext_resource type="Script" path="res://enemy_spawner.gd" id="1_bqoyt"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_v5pfk"]
+size = Vector3(2, 1.5, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h6soq"]
+albedo_color = Color(0.48461, 0.69, 0.0414, 1)
+
+[node name="EnemySpawner" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9998, 0, -19.7786)
+script = ExtResource("1_bqoyt")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.893476, 0)
+mesh = SubResource("PrismMesh_v5pfk")
+surface_material_override/0 = SubResource("StandardMaterial3D_h6soq")
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.540112, 0)

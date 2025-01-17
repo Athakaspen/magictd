@@ -1,13 +1,19 @@
-[gd_scene load_steps=21 format=3 uid="uid://cswtb4wuivl45"]
+[gd_scene load_steps=25 format=3 uid="uid://cswtb4wuivl45"]
 
 [ext_resource type="Script" path="res://ManaObjects/network_manager.gd" id="1_b1ugw"]
+[ext_resource type="Script" path="res://Helpers/wave_manager.gd" id="1_lcciw"]
 [ext_resource type="Script" path="res://Helpers/debug_lines.gd" id="2_ikf1a"]
 [ext_resource type="PackedScene" uid="uid://c4ptl6sx68udt" path="res://ManaObjects/collector.tscn" id="3_mwmbo"]
 [ext_resource type="PackedScene" uid="uid://caprmog2457xr" path="res://ManaObjects/base.tscn" id="4_k8buu"]
+[ext_resource type="PackedScene" uid="uid://dytr4ag07ev5p" path="res://ManaObjects/relay.tscn" id="5_f5wdy"]
 [ext_resource type="PackedScene" uid="uid://drasq2nfn6vs5" path="res://Player/player_character.tscn" id="5_i2pwt"]
 [ext_resource type="PackedScene" uid="uid://dxptckeeie8yw" path="res://Enemies/enemy.tscn" id="7_3qcx3"]
 [ext_resource type="PackedScene" uid="uid://bqjkvixbtqbcp" path="res://ManaObjects/Turret.tscn" id="8_3jfj8"]
-[ext_resource type="Script" path="res://enemy_spawner.gd" id="8_mp0y0"]
+[ext_resource type="PackedScene" uid="uid://balt8aperorbs" path="res://enemy_spawner.tscn" id="9_fs1ab"]
+[ext_resource type="Script" path="res://wave_timer/wave_timer.gd" id="11_8pmkr"]
+[ext_resource type="PackedScene" uid="uid://dgca8dtg8nmth" path="res://wave_timer/timeline_block.tscn" id="12_ito5u"]
+[ext_resource type="Texture2D" uid="uid://c7p7u310lc1c2" path="res://icon.svg" id="12_w4fw5"]
+[ext_resource type="PackedScene" uid="uid://c8r0ibs0juxkb" path="res://wave_timer/wave_label.tscn" id="13_vuaha"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2iamr"]
 size = Vector3(50, 1, 50)
@@ -29,12 +35,6 @@ size = Vector3(0.352539, 2.78699, 2.00598)
 [sub_resource type="Environment" id="Environment_budra"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_qcjm1"]
-
-[sub_resource type="PrismMesh" id="PrismMesh_v5pfk"]
-size = Vector3(2, 1.5, 2)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h6soq"]
-albedo_color = Color(0.48461, 0.69, 0.0414, 1)
 
 [sub_resource type="GDScript" id="GDScript_o8bm0"]
 script/source = "extends Label
@@ -108,6 +108,11 @@ shape = SubResource("BoxShape3D_o0vqj")
 transform = Transform3D(0.360113, 0, 0, 0, 2.76053, 0, 0, 0, 1.97356, 0, 0, 0)
 mesh = SubResource("BoxMesh_bxsi4")
 
+[node name="WaveManager" type="Node3D" parent="." node_paths=PackedStringArray("wave_timer")]
+unique_name_in_owner = true
+script = ExtResource("1_lcciw")
+wave_timer = NodePath("../CanvasLayer/WaveTimer")
+
 [node name="NetworkManager" type="Node3D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("1_b1ugw")
@@ -147,13 +152,22 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.78403, -0.0801494, -3.4997
 mana_per_sec = 1
 SEND_COOLTIME = 0.1
 
+[node name="Relay" parent="NetworkManager" instance=ExtResource("5_f5wdy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.34136, 0, -1.54504)
+
 [node name="Turret" parent="NetworkManager" instance=ExtResource("8_3jfj8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.83278, 0, -2.35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.46213, 0, -11.7169)
 
 [node name="PlayerCharacter" parent="." node_paths=PackedStringArray("network_manager") instance=ExtResource("5_i2pwt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.248349, 4.76837e-07, -1.88345)
 collision_mask = 1
 network_manager = NodePath("../NetworkManager")
+
+[node name="EnemySpawner" parent="." instance=ExtResource("9_fs1ab")]
+
+[node name="Enemy" parent="." node_paths=PackedStringArray("mana_base") instance=ExtResource("7_3qcx3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4327, 0.859059, -2.46262)
+mana_base = NodePath("../NetworkManager/Base")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_budra")
@@ -162,32 +176,66 @@ camera_attributes = SubResource("CameraAttributesPractical_qcjm1")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.968274, 0, 0.24989, -0.242542, -0.240719, 0.939802, 0.0601533, -0.970595, -0.233082, 0.731981, 2.36595, -0.00254321)
 
-[node name="Spawner" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05433, 1.66819, -17.7436)
-
-[node name="EnemySpawner" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.9998, 0, -19.7786)
-script = ExtResource("8_mp0y0")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="EnemySpawner"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.893476, 0)
-mesh = SubResource("PrismMesh_v5pfk")
-surface_material_override/0 = SubResource("StandardMaterial3D_h6soq")
-
-[node name="Marker3D" type="Marker3D" parent="EnemySpawner"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.540112, 0)
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="Label" type="Label" parent="CanvasLayer"]
-offset_left = 35.0
-offset_top = 577.0
-offset_right = 139.0
-offset_bottom = 622.0
+offset_left = 24.0
+offset_top = 26.0
+offset_right = 128.0
+offset_bottom = 71.0
 theme_override_font_sizes/font_size = 32
 text = "Mana: "
 script = SubResource("GDScript_o8bm0")
 
-[node name="Enemy" parent="." node_paths=PackedStringArray("mana_base") instance=ExtResource("7_3qcx3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4327, 0.859059, -2.46262)
-mana_base = NodePath("../NetworkManager/Base")
+[node name="WaveTimer" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 573.0
+offset_top = 590.0
+offset_right = 613.0
+offset_bottom = 630.0
+script = ExtResource("11_8pmkr")
+
+[node name="Slider" type="Control" parent="CanvasLayer/WaveTimer"]
+anchors_preset = 0
+offset_left = -448.0
+offset_top = -52.0
+offset_right = -408.0
+offset_bottom = -12.0
+
+[node name="TimelineBlock" parent="CanvasLayer/WaveTimer/Slider" instance=ExtResource("12_ito5u")]
+layout_mode = 0
+
+[node name="TimelineBlock2" type="TextureRect" parent="CanvasLayer/WaveTimer/Slider"]
+layout_mode = 0
+offset_left = 64.0
+offset_right = 192.0
+offset_bottom = 128.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("12_w4fw5")
+
+[node name="TimelineBlock3" type="TextureRect" parent="CanvasLayer/WaveTimer/Slider"]
+layout_mode = 0
+offset_left = 128.0
+offset_right = 256.0
+offset_bottom = 128.0
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("12_w4fw5")
+
+[node name="WaveLabel" parent="CanvasLayer/WaveTimer/Slider" instance=ExtResource("13_vuaha")]
+z_index = 1
+layout_mode = 0
+offset_left = 12.0
+offset_top = 7.0
+offset_right = 123.0
+offset_bottom = 52.0
+
+[node name="Ticker" type="TextureRect" parent="CanvasLayer/WaveTimer"]
+modulate = Color(1, 0, 0, 1)
+layout_mode = 0
+offset_left = -506.0
+offset_top = -82.0
+offset_right = -378.0
+offset_bottom = 46.0
+scale = Vector2(0.1, 1)
+texture = ExtResource("12_w4fw5")
