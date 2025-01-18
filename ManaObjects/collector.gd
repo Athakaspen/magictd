@@ -1,8 +1,8 @@
 extends ManaObject
 class_name ManaCollector
 
-@export var mana_per_sec := 2
-@export var SEND_COOLTIME := 0.5
+@export var mana_per_sec : float = 0.8
+@export var SEND_COOLTIME := 0.2
 var max_mana : int = 3
 var cur_mana : int = 0
 var wait_time := 1.0 / mana_per_sec

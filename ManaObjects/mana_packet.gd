@@ -37,7 +37,7 @@ func end_tween():
 		tween_to_next_position()
 	else:
 		var end_node : AStarNode = network_manager.get_astar_node(path_ids[-1])
-		if end_node != null:
+		if end_node != null and "give_mana" in end_node.obj:
 			end_node.obj.give_mana(mana_amount)
 		self.queue_free()
 

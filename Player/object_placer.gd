@@ -28,7 +28,6 @@ func _process(_delta):
 			var placement_point = placement_raycast.get_collision_point()
 			if network_manager.get_base_mana() >= next_to_place.cost:
 				network_manager.take_base_mana(next_to_place.cost)
-				print(next_to_place)
 				if next_to_place is ManaRelay:
 					network_manager.add_mana_object(ManaRelay, placement_point)
 				elif next_to_place is ManaTurret:

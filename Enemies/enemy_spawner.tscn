@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://balt8aperorbs"]
 
-[ext_resource type="Script" path="res://enemy_spawner.gd" id="1_bqoyt"]
+[ext_resource type="Script" path="res://Enemies/enemy_spawner.gd" id="1_bqoyt"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_v5pfk"]
 size = Vector3(2, 1.5, 2)

@@ -59,14 +59,15 @@ func add_mana_object(type, new_pos : Vector3):
 
 func remove_mana_object(object: ManaObject):
 	var node = get_astar_node(object.network_id)
-	AStar.remove_point(node.id)
-	requesters.erase(node)
-	providers.erase(node)
-	id_to_node_map.erase(node.id)
+	if node != null:
+		AStar.remove_point(node.id)
+		requesters.erase(node)
+		providers.erase(node)
+		id_to_node_map.erase(node.id)
 
 func create_astar_node(object) -> AStarNode:
 	var node = AStarNode.new()
-	node.id = AStar.get_available_point_id()
+	node.id = get_next_point_id()
 	object.network_id = node.id
 	node.obj = object
 	id_to_node_map[node.id] = node
@@ -85,6 +86,11 @@ func create_astar_node(object) -> AStarNode:
 	AStar.add_point(node.id, pos)
 	link_objects_in_range(node)
 	return node
+
+var id_counter : int = 1
+func get_next_point_id():
+	id_counter += 1
+	return id_counter
 
 func delete_astar_node(node : AStarNode):
 	id_to_node_map[node.id] = null

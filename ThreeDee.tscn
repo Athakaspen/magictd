@@ -1,19 +1,30 @@
-[gd_scene load_steps=25 format=3 uid="uid://cswtb4wuivl45"]
+[gd_scene load_steps=30 format=3 uid="uid://cswtb4wuivl45"]
 
 [ext_resource type="Script" path="res://ManaObjects/network_manager.gd" id="1_b1ugw"]
 [ext_resource type="Script" path="res://Helpers/wave_manager.gd" id="1_lcciw"]
 [ext_resource type="Script" path="res://Helpers/debug_lines.gd" id="2_ikf1a"]
 [ext_resource type="PackedScene" uid="uid://c4ptl6sx68udt" path="res://ManaObjects/collector.tscn" id="3_mwmbo"]
 [ext_resource type="PackedScene" uid="uid://caprmog2457xr" path="res://ManaObjects/base.tscn" id="4_k8buu"]
-[ext_resource type="PackedScene" uid="uid://dytr4ag07ev5p" path="res://ManaObjects/relay.tscn" id="5_f5wdy"]
 [ext_resource type="PackedScene" uid="uid://drasq2nfn6vs5" path="res://Player/player_character.tscn" id="5_i2pwt"]
-[ext_resource type="PackedScene" uid="uid://dxptckeeie8yw" path="res://Enemies/enemy.tscn" id="7_3qcx3"]
-[ext_resource type="PackedScene" uid="uid://bqjkvixbtqbcp" path="res://ManaObjects/Turret.tscn" id="8_3jfj8"]
-[ext_resource type="PackedScene" uid="uid://balt8aperorbs" path="res://enemy_spawner.tscn" id="9_fs1ab"]
+[ext_resource type="StyleBox" uid="uid://c4muc4vpssb1y" path="res://panel.tres" id="6_cgqv8"]
+[ext_resource type="PackedScene" uid="uid://balt8aperorbs" path="res://Enemies/enemy_spawner.tscn" id="9_fs1ab"]
 [ext_resource type="Script" path="res://wave_timer/wave_timer.gd" id="11_8pmkr"]
 [ext_resource type="PackedScene" uid="uid://dgca8dtg8nmth" path="res://wave_timer/timeline_block.tscn" id="12_ito5u"]
+[ext_resource type="Script" path="res://menu.gd" id="12_otxol"]
 [ext_resource type="Texture2D" uid="uid://c7p7u310lc1c2" path="res://icon.svg" id="12_w4fw5"]
 [ext_resource type="PackedScene" uid="uid://c8r0ibs0juxkb" path="res://wave_timer/wave_label.tscn" id="13_vuaha"]
+
+[sub_resource type="GDScript" id="GDScript_o8bm0"]
+script/source = "extends Label
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta):
+	text = \"Mana: \" + str(%Base.cur_mana) + \"/\" + str(%Base.max_mana) + \"\\nCost to build: \" + str(Singleton.cur_cost)
+"
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_4d4po"]
+color = Color(0.705882, 0.25098, 0.772549, 1)
+thickness = 8
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_2iamr"]
 size = Vector3(50, 1, 50)
@@ -21,170 +32,62 @@ size = Vector3(50, 1, 50)
 [sub_resource type="PlaneMesh" id="PlaneMesh_cp66l"]
 size = Vector2(50, 50)
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_v182q"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jglat"]
+albedo_color = Color(0.73, 0.641427, 0.5402, 1)
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_2wi22"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_x3max"]
+height = 3.0
+radius = 3.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_scq5f"]
+top_radius = 3.0
+bottom_radius = 3.0
+height = 3.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_o0vqj"]
 size = Vector3(0.352539, 2.78699, 2.00598)
 
 [sub_resource type="BoxMesh" id="BoxMesh_bxsi4"]
 
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_1hc1g"]
+height = 0.2
+radius = 1.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7lvi7"]
+top_radius = 1.0
+bottom_radius = 1.0
+height = 0.2
+
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_sr5sw"]
 
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_c3kra"]
+rayleigh_coefficient = 0.75
+turbidity = 3.8
+ground_color = Color(0.0944177, 0.0716731, 0.0455809, 1)
+energy_multiplier = 4.0
+
+[sub_resource type="Sky" id="Sky_l1ntn"]
+sky_material = SubResource("PhysicalSkyMaterial_c3kra")
+
 [sub_resource type="Environment" id="Environment_budra"]
+background_mode = 2
+sky = SubResource("Sky_l1ntn")
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_qcjm1"]
 
-[sub_resource type="GDScript" id="GDScript_o8bm0"]
-script/source = "extends Label
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(_delta):
-	text = \"Mana: \" + str(%Base.cur_mana) + \"/\" + str(Singleton.cur_cost)
-"
-
 [node name="ThreeDee" type="Node3D"]
-
-[node name="Geometry" type="Node3D" parent="."]
-
-[node name="Floor" type="StaticBody3D" parent="Geometry"]
-collision_mask = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
-shape = SubResource("BoxShape3D_2iamr")
-
-[node name="floor" type="MeshInstance3D" parent="Geometry/Floor"]
-mesh = SubResource("PlaneMesh_cp66l")
-skeleton = NodePath("../../..")
-metadata/_edit_lock_ = true
-
-[node name="capsule" type="StaticBody3D" parent="Geometry"]
-transform = Transform3D(1, 0, 0, 0, 0.896996, -0.442038, 0, 0.442038, 0.896996, 1.57671, -0.177396, -1.79953)
-collision_mask = 0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/capsule"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-shape = SubResource("CapsuleShape3D_v182q")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/capsule"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
-mesh = SubResource("CapsuleMesh_2wi22")
-
-[node name="wall" type="StaticBody3D" parent="Geometry"]
-transform = Transform3D(0.640472, 0, -0.767982, 0, 1, 0, 0.767982, 0, 0.640472, 1.87478, 0.0136595, 0.631075)
-collision_mask = 0
-metadata/_edit_group_ = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/wall"]
-shape = SubResource("BoxShape3D_o0vqj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/wall/CollisionShape3D"]
-transform = Transform3D(0.360113, 0, 0, 0, 2.76053, 0, 0, 0, 1.97356, 0, 0, 0)
-mesh = SubResource("BoxMesh_bxsi4")
-
-[node name="wall2" type="StaticBody3D" parent="Geometry"]
-transform = Transform3D(0.958238, 0, 0.285973, 0, 1, 0, -0.285973, 0, 0.958238, 0.970902, 0.0144196, 3.83356)
-collision_mask = 0
-metadata/_edit_group_ = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/wall2"]
-shape = SubResource("BoxShape3D_o0vqj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/wall2/CollisionShape3D"]
-transform = Transform3D(0.360113, 0, 0, 0, 2.76053, 0, 0, 0, 1.97356, 0, 0, 0)
-mesh = SubResource("BoxMesh_bxsi4")
-
-[node name="wall3" type="StaticBody3D" parent="Geometry"]
-transform = Transform3D(0.978426, 0, -0.206597, 0, 1, 0, 0.206597, 0, 0.978426, 0.959101, 0.0144196, 2.08326)
-collision_mask = 0
-metadata/_edit_group_ = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/wall3"]
-shape = SubResource("BoxShape3D_o0vqj")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/wall3/CollisionShape3D"]
-transform = Transform3D(0.360113, 0, 0, 0, 2.76053, 0, 0, 0, 1.97356, 0, 0, 0)
-mesh = SubResource("BoxMesh_bxsi4")
-
-[node name="WaveManager" type="Node3D" parent="." node_paths=PackedStringArray("wave_timer")]
-unique_name_in_owner = true
-script = ExtResource("1_lcciw")
-wave_timer = NodePath("../CanvasLayer/WaveTimer")
-
-[node name="NetworkManager" type="Node3D" parent="."]
-unique_name_in_owner = true
-script = ExtResource("1_b1ugw")
-
-[node name="DebugLines" type="MeshInstance3D" parent="NetworkManager"]
-mesh = SubResource("ImmediateMesh_sr5sw")
-skeleton = NodePath("")
-script = ExtResource("2_ikf1a")
-
-[node name="Base" parent="NetworkManager" instance=ExtResource("4_k8buu")]
-unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.76195, 0, -2.91592)
-max_mana = 100
-
-[node name="Collector" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.08232, -0.0801492, 3.70988)
-mana_per_sec = 1
-SEND_COOLTIME = 0.1
-
-[node name="Collector2" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.73623, -0.0801492, 2.01655)
-mana_per_sec = 1
-SEND_COOLTIME = 0.1
-
-[node name="Collector3" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.12408, -0.0801492, 4.2759)
-mana_per_sec = 1
-SEND_COOLTIME = 0.1
-
-[node name="Collector4" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.27943, -0.0801494, 3.27528)
-mana_per_sec = 1
-SEND_COOLTIME = 0.1
-
-[node name="Collector5" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.78403, -0.0801494, -3.49973)
-mana_per_sec = 1
-SEND_COOLTIME = 0.1
-
-[node name="Relay" parent="NetworkManager" instance=ExtResource("5_f5wdy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.34136, 0, -1.54504)
-
-[node name="Turret" parent="NetworkManager" instance=ExtResource("8_3jfj8")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.46213, 0, -11.7169)
-
-[node name="PlayerCharacter" parent="." node_paths=PackedStringArray("network_manager") instance=ExtResource("5_i2pwt")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.248349, 4.76837e-07, -1.88345)
-collision_mask = 1
-network_manager = NodePath("../NetworkManager")
-
-[node name="EnemySpawner" parent="." instance=ExtResource("9_fs1ab")]
-
-[node name="Enemy" parent="." node_paths=PackedStringArray("mana_base") instance=ExtResource("7_3qcx3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.4327, 0.859059, -2.46262)
-mana_base = NodePath("../NetworkManager/Base")
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_budra")
-camera_attributes = SubResource("CameraAttributesPractical_qcjm1")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.968274, 0, 0.24989, -0.242542, -0.240719, 0.939802, 0.0601533, -0.970595, -0.233082, 0.731981, 2.36595, -0.00254321)
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Label" type="Label" parent="CanvasLayer"]
-offset_left = 24.0
-offset_top = 26.0
-offset_right = 128.0
-offset_bottom = 71.0
-theme_override_font_sizes/font_size = 32
-text = "Mana: "
+[node name="ManaLabel" type="Label" parent="CanvasLayer"]
+offset_left = 17.0
+offset_top = 13.0
+offset_right = 121.0
+offset_bottom = 58.0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+text = "Mana:
+Cost to build:"
 script = SubResource("GDScript_o8bm0")
 
 [node name="WaveTimer" type="Control" parent="CanvasLayer"]
@@ -198,10 +101,10 @@ script = ExtResource("11_8pmkr")
 
 [node name="Slider" type="Control" parent="CanvasLayer/WaveTimer"]
 anchors_preset = 0
-offset_left = -448.0
-offset_top = -52.0
-offset_right = -408.0
-offset_bottom = -12.0
+offset_left = -500.0
+offset_top = -6.0
+offset_right = -460.0
+offset_bottom = 34.0
 
 [node name="TimelineBlock" parent="CanvasLayer/WaveTimer/Slider" instance=ExtResource("12_ito5u")]
 layout_mode = 0
@@ -231,11 +134,440 @@ offset_right = 123.0
 offset_bottom = 52.0
 
 [node name="Ticker" type="TextureRect" parent="CanvasLayer/WaveTimer"]
-modulate = Color(1, 0, 0, 1)
+modulate = Color(0, 0, 0, 1)
 layout_mode = 0
-offset_left = -506.0
-offset_top = -82.0
-offset_right = -378.0
-offset_bottom = 46.0
-scale = Vector2(0.1, 1)
+offset_left = -509.0
+offset_top = -9.0
+offset_right = -381.0
+offset_bottom = 119.0
+scale = Vector2(0.08, 1)
 texture = ExtResource("12_w4fw5")
+
+[node name="Menu" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("12_otxol")
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Menu/CenterContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("6_cgqv8")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Menu/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.704899, 0.250527, 0.77401, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 48
+text = "UNTITLED DEFENSE GAME"
+horizontal_alignment = 1
+
+[node name="howtoplay" type="Label" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.705882, 0.25098, 0.772549, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 10
+text = "Protect the Purple Rings!!"
+horizontal_alignment = 1
+
+[node name="spacer4" type="Panel" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="howtoplay" type="Label" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "How to play: "
+
+[node name="HowToPlay" type="Label" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Build a Mana Network!
+Connect to Blue Cones for Mana
+Place Yellow Turrets to hit Enemies
+Survive all waves to win
+"
+
+[node name="spacer3" type="Panel" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="controls" type="Label" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Controls: "
+
+[node name="Controls" type="Label" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Jump: Space (A)
+Place: E (X)
+Swap: Q (B)
+Zoom: Scroll (D-pad)"
+
+[node name="spacer3" type="Panel" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="InvertX" type="CheckBox" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Invert X (controller)"
+
+[node name="InvertY" type="CheckBox" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Invert Y (controller)"
+
+[node name="spacer2" type="Panel" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 16)
+layout_mode = 2
+
+[node name="DifficultyText" type="Label" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Difficulty Scale: 1.0"
+horizontal_alignment = 1
+
+[node name="DifficultySlider" type="HSlider" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_styles/slider = SubResource("StyleBoxLine_4d4po")
+min_value = 0.4
+max_value = 3.0
+step = 0.1
+value = 1.0
+
+[node name="spacer" type="Panel" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 32
+text = "  Start Game  "
+
+[node name="Gameover" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/Gameover"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Gameover/CenterContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 128
+text = "Game Over!"
+
+[node name="Youwin" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/Youwin"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/Youwin/CenterContainer"]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("6_cgqv8")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Youwin/CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Youwin/CenterContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="youwin" type="Label" parent="CanvasLayer/Youwin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 94
+text = "You Win!"
+horizontal_alignment = 1
+
+[node name="goodjob" type="Label" parent="CanvasLayer/Youwin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "Amazing job completing the challenge
+of defending the Purple Rings."
+horizontal_alignment = 1
+
+[node name="spacer" type="Panel" parent="CanvasLayer/Youwin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="tryharder" type="Label" parent="CanvasLayer/Youwin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Now, can you do it on a higher difficulty?"
+horizontal_alignment = 1
+
+[node name="omg" type="Label" parent="CanvasLayer/Youwin/CenterContainer/PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "And on the highest difficulty, too?
+You must be a very Cool Guy."
+horizontal_alignment = 1
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="Geometry"]
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_2iamr")
+
+[node name="floor" type="MeshInstance3D" parent="Geometry/Floor"]
+mesh = SubResource("PlaneMesh_cp66l")
+skeleton = NodePath("../../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_jglat")
+metadata/_edit_lock_ = true
+
+[node name="platform" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 2.98023e-08, 1, 0, 0, 0, 1, 7.72131, 0.405004, -6.1456)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/platform"]
+shape = SubResource("CylinderShape3D_x3max")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/platform"]
+mesh = SubResource("CylinderMesh_scq5f")
+
+[node name="ramp" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(0.357458, -1.80899, 0, 0.687344, 0.940777, 0, 0, 0, 1, 12.749, 0.476303, -6.09833)
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/ramp"]
+shape = SubResource("BoxShape3D_o0vqj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/ramp/CollisionShape3D"]
+transform = Transform3D(0.360113, 0, 0, 0, 2.76053, 0, 0, 0, 1.97356, 0, 0, 0)
+mesh = SubResource("BoxMesh_bxsi4")
+
+[node name="wall" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(-0.473427, 0, 5.35083, 0, 1, 0, -0.880833, 0, -2.87595, 7.54556, 0.491203, 13.5138)
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/wall"]
+shape = SubResource("BoxShape3D_o0vqj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/wall/CollisionShape3D"]
+transform = Transform3D(0.360113, 0, 0, 0, 2.76053, 0, 0, 0, 1.97356, 0, 0, 0)
+mesh = SubResource("BoxMesh_bxsi4")
+
+[node name="climb" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(0.543746, -0.215813, 4.10984, 0, 0.966372, 1.30309, -0.83925, -0.139824, 2.66274, -6.0547, 0.0144196, -17.3178)
+collision_mask = 0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/climb"]
+shape = SubResource("BoxShape3D_o0vqj")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/climb/CollisionShape3D"]
+transform = Transform3D(0.360113, 0, 0, 0, 2.76053, 0, 0, 0, 1.97356, 0, 0, 0)
+mesh = SubResource("BoxMesh_bxsi4")
+
+[node name="parkour" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.14927, 1.71584, 9.62887)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/parkour"]
+shape = SubResource("CylinderShape3D_1hc1g")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/parkour"]
+mesh = SubResource("CylinderMesh_7lvi7")
+
+[node name="parkour2" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.6599, 3.13917, 3.87486)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/parkour2"]
+shape = SubResource("CylinderShape3D_1hc1g")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/parkour2"]
+mesh = SubResource("CylinderMesh_7lvi7")
+
+[node name="parkour3" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.63126, 0.966837, 12.6415)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/parkour3"]
+shape = SubResource("CylinderShape3D_1hc1g")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/parkour3"]
+mesh = SubResource("CylinderMesh_7lvi7")
+
+[node name="parkour4" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.90164, 2.62144, 6.2778)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/parkour4"]
+shape = SubResource("CylinderShape3D_1hc1g")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/parkour4"]
+mesh = SubResource("CylinderMesh_7lvi7")
+
+[node name="parkour5" type="StaticBody3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.33002, 0.420212, 10.1889)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Geometry/parkour5"]
+shape = SubResource("CylinderShape3D_1hc1g")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry/parkour5"]
+mesh = SubResource("CylinderMesh_7lvi7")
+
+[node name="WaveManager" type="Node3D" parent="." node_paths=PackedStringArray("wave_timer", "spawners")]
+unique_name_in_owner = true
+script = ExtResource("1_lcciw")
+wave_timer = NodePath("../CanvasLayer/WaveTimer")
+spawners = [NodePath("../EnemySpawner"), NodePath("../EnemySpawner2")]
+
+[node name="NetworkManager" type="Node3D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("1_b1ugw")
+
+[node name="DebugLines" type="MeshInstance3D" parent="NetworkManager"]
+mesh = SubResource("ImmediateMesh_sr5sw")
+skeleton = NodePath("")
+script = ExtResource("2_ikf1a")
+
+[node name="Base" parent="NetworkManager" instance=ExtResource("4_k8buu")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0586782, 0, -0.0390499)
+max_mana = 50
+
+[node name="Collector3" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.15405, 0, 5.64787)
+
+[node name="Collector4" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.89258, 0, 2.3839)
+
+[node name="Collector5" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.1102, 0, -14.6084)
+
+[node name="Collector6" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.9499, 0, -18.9462)
+
+[node name="Collector7" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9662, 0, -6.84679)
+
+[node name="Collector8" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.3429, 0, 12.3441)
+
+[node name="Collector9" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.1292, 3.22721, 3.752)
+mana_per_sec = 2.0
+
+[node name="Collector10" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.66466, 0, -13.6876)
+
+[node name="Collector11" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 21.0044, 0, -20.71)
+mana_per_sec = 2.0
+
+[node name="Collector" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.37516, 1.905, -7.7292)
+
+[node name="Collector2" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.81081, 1.905, -4.22723)
+
+[node name="Collector12" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.56799, 2.55794, -15.0863)
+
+[node name="Collector13" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7105, 0, 19.5345)
+
+[node name="Collector14" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.2416, -1.90735e-06, 17.2977)
+
+[node name="EnemyHolder" type="Node3D" parent="."]
+
+[node name="PlayerCharacter" parent="." node_paths=PackedStringArray("network_manager") instance=ExtResource("5_i2pwt")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.74315, -1.7053e-13, 0.909944)
+collision_mask = 1
+network_manager = NodePath("../NetworkManager")
+
+[node name="EnemySpawner" parent="." node_paths=PackedStringArray("enemy_holder") instance=ExtResource("9_fs1ab")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.54419, 0, -6.71214)
+enemy_holder = NodePath("../EnemyHolder")
+seconds_between_spawns = 5.0
+random_shift = 0.1
+
+[node name="EnemySpawner2" parent="." node_paths=PackedStringArray("enemy_holder") instance=ExtResource("9_fs1ab")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.17019, 0, 7.67147)
+enemy_holder = NodePath("../EnemyHolder")
+seconds_between_spawns = 5.0
+random_shift = 0.1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_budra")
+camera_attributes = SubResource("CameraAttributesPractical_qcjm1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.968274, 0, 0.24989, -0.242542, -0.240719, 0.939802, 0.0601533, -0.970595, -0.233082, 0.731981, 2.36595, -0.00254321)
+
+[connection signal="toggled" from="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/InvertX" to="CanvasLayer/Menu" method="_on_invert_x_toggled"]
+[connection signal="toggled" from="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/InvertY" to="CanvasLayer/Menu" method="_on_invert_y_toggled"]
+[connection signal="value_changed" from="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/DifficultySlider" to="CanvasLayer/Menu" method="_on_difficulty_slider_value_changed"]
+[connection signal="pressed" from="CanvasLayer/Menu/CenterContainer/PanelContainer/MarginContainer/VBoxContainer/CloseButton" to="CanvasLayer/Menu" method="_on_button_pressed"]

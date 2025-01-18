@@ -1,23 +1,25 @@
 extends CharacterBody3D
+class_name Enemy
 
 @export var mana_base : ManaBase
 var target_node : Node3D
 
-@export var SPEED = 0.5
+@export var SPEED = 1.5
 @export var ROT_SPEED = 3.0
 const JUMP_VELOCITY = 4.5
 
 const STOP_DISTANCE : float = 0.75
-@export var MAX_HP : float = 50
+@export var MAX_HP : float = 39
 
-const RETARGET_TIME = 0.59 # seconds
+const RETARGET_TIME = 0.17 # seconds
 var time_to_next_retarget = RETARGET_TIME
 
 @export var ATTACK_DAMAGE : int = 2
 @export var ATTACK_TIME : float = 2.0
 @onready var time_to_next_attack = ATTACK_TIME
 
-var hp = MAX_HP
+var hp : float = MAX_HP
+var incoming_damage : float = 0
 
 func _ready():
 	retarget()
@@ -92,6 +94,7 @@ func _physics_process(delta):
 
 func on_hit(damage: float):
 	hp -= damage
+	incoming_damage -= damage
 	if hp <= 0:
 		self.queue_free()
 

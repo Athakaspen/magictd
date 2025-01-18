@@ -7,6 +7,9 @@ const JUMP_VELOCITY = 4.5
 const MOUSE_SENSITIVITY = 0.5
 const JOY_SENSITIVIY = 5.0
 
+var is_inverted_x = false
+var is_inverted_y = false
+
 const CAM_DIST_MIN = 1.5
 const CAM_DIST_MAX = 4.0
 const ZOOM_SPEED = 0.4
@@ -20,11 +23,10 @@ const ZOOM_SPEED = 0.4
 @onready var camera = $CameraOrigin/CameraHelper/SpringArm3D/PlayerCamera
 
 func _ready():
-	print(Layers)
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera_helper.rotation.x = clamp(camera_helper.rotation.x, deg_to_rad(-60), deg_to_rad(-25))
 
 func _input(event):
+	if Singleton.game_paused: return
 	if event is InputEventMouseMotion:
 		rotate_camera(Vector2(-event.relative.x * MOUSE_SENSITIVITY, -event.relative.y * MOUSE_SENSITIVITY))
 
@@ -34,12 +36,13 @@ func rotate_camera(delta: Vector2):
 	camera_helper.rotation.x = clamp(camera_helper.rotation.x, deg_to_rad(-70), deg_to_rad(-20))
 
 func _physics_process(delta):
+	if Singleton.game_paused: return
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
 	# Handle jump.
-	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
+	if Input.is_action_just_pressed("jump") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 	
 	# Zoom
@@ -51,15 +54,13 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("cycle_items"):
 		$ObjectPlacer.cycle_next_to_place()
 	
-	# Uncapture mouse
-	if Input.is_action_just_pressed("quit"):
-		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		else:
-			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 	var look_dir = Input.get_vector("look_left", "look_right", "look_up", "look_down")
-	rotate_camera(look_dir * JOY_SENSITIVIY)
+	if is_inverted_x:
+		look_dir.x = -look_dir.x
+	if is_inverted_y:
+		look_dir.y = -look_dir.y
+	rotate_camera(look_dir * -JOY_SENSITIVIY)
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir = Input.get_vector("move_left", "move_right", "move_forward", "move_back")

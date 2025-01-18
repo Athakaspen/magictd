@@ -3,12 +3,13 @@ class_name ManaTurret
 
 @export var cost : int = 10
 @onready var mana_transit_pos = $ManaPoint.global_position
-@export var max_mana := 100
-var cur_mana := 0
+@export var max_mana := 30
+
+var cur_mana := 6
 
 @export var fire_range : float = 4.0
-@export var fire_cost : int = 2
-@export var fire_rate_per_sec : float = 0.8
+@export var fire_cost : int = 3
+@export var fire_rate_per_sec : float = 1.6
 @export var damage : float = 10.0
 
 var projectile_res = preload("res://ManaObjects/Projectile.tscn")
@@ -27,7 +28,9 @@ func _process(delta):
 	fire_cooldown -= delta
 	if fire_cooldown <= 0 and cur_mana >= fire_cost:
 		# acquire target
-		var targets = range_area.get_overlapping_bodies()
+		var targets : Array = range_area.get_overlapping_bodies()
+		# remove invalid targets
+		targets = targets.filter(func(e): return ((e is Enemy) and (e.hp - e.incoming_damage > 0)))
 		if not targets.is_empty():
 			var closest = targets[0]
 			for target in targets:
@@ -37,16 +40,17 @@ func _process(delta):
 			shoot_at(closest)
 
 var shots_fired : int = 0
-func shoot_at(target : Node3D):
+func shoot_at(target : Enemy):
 	cur_mana -= fire_cost
 	var proj = projectile_res.instantiate()
 	proj.setup(mana_transit_pos, target, damage)
 	add_child(proj)
+	target.incoming_damage += damage
 	fire_cooldown = 1.0 / fire_rate_per_sec
 	shots_fired += 1
 
-func on_hit(damage:int):
-	cur_mana -= damage
+func on_hit(damage_amt : int):
+	cur_mana -= damage_amt
 	if cur_mana <= -10:
 		Singleton.network_manager.remove_mana_object(self)
 		self.queue_free()

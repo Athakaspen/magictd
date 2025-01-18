@@ -1,11 +1,13 @@
 extends MeshInstance3D
 
-var speed : float = 4.0
-var target : Node3D
+var speed : float = 7.0
+var target : Enemy
 var damage : float
 var start_position : Vector3
 
-func setup(i_position : Vector3, i_target : Node3D, i_damage: float, i_speed: float = speed):
+@onready var spin = Vector3(randf(), randf(), randf()) * 4.0
+
+func setup(i_position : Vector3, i_target : Enemy, i_damage: float, i_speed: float = speed):
 	start_position = i_position
 	target = i_target
 	damage = i_damage
@@ -25,6 +27,7 @@ func _process(delta):
 			do_hit()
 		else:
 			self.position += vec_to.normalized() * speed * delta
+		self.rotation += spin * delta
 
 func do_hit():
 	target.on_hit(damage)

@@ -40,6 +40,5 @@ func _take_mana(amount):
 func on_hit(damage:int):
 	cur_mana -= damage
 	if cur_mana <= 0:
-		print("Game Over!")
-		#Singleton.network_manager.remove_mana_object(self)
-		#self.queue_free()
+		visible = false
+		Singleton.game_over()

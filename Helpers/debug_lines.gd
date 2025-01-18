@@ -17,6 +17,11 @@ func _process(_delta):
 		# Draw
 		mesh.clear_surfaces()
 		mesh.surface_begin(Mesh.PRIMITIVE_LINES)
+		
+		# make something to avoid errors
+		mesh.surface_add_vertex(Vector3.ZERO)
+		mesh.surface_add_vertex(Vector3.ZERO)
+		
 		var checkedPoints : Array
 		for p1 in AStar.get_point_ids():
 			for p2 in AStar.get_point_connections(p1):
