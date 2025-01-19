@@ -39,6 +39,6 @@ func _take_mana(amount):
 
 func on_hit(damage:int):
 	cur_mana -= damage
-	if cur_mana <= 0:
+	if cur_mana <= -4:
 		visible = false
 		Singleton.game_over()

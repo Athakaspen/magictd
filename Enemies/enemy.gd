@@ -35,6 +35,7 @@ func _process(delta):
 func retarget():
 	var bodies : Array[Node3D] = $TargetingArea.get_overlapping_bodies()
 	bodies.sort_custom(target_priority)
+	print(bodies)
 	if len(bodies) > 0:
 		target_node = bodies[0].get_parent()
 		if target_node is not ManaObject or target_node is ManaCollector:
@@ -48,21 +49,26 @@ func target_priority(a, b):
 		return true
 	if b.get_parent() == target_node:
 		return false
-	# base
-	if a.get_parent() is ManaBase:
-		return true
-	if b.get_parent() is ManaBase:
+	
+	# base and turret
+	if a.get_parent() is ManaBase or a.get_parent() is ManaTurret:
+		if b.get_parent() is ManaBase or b.get_parent() is ManaTurret:
+			# same priority, go by distance
+			if global_position.distance_to(a.global_position) < global_position.distance_to(a.global_position):
+				return true
+			else:
+				return false
+		else:
+			return true
+	elif b.get_parent() is ManaBase or b.get_parent() is ManaTurret:
 		return false
-	# turret
-	if a.get_parent() is ManaTurret:
-		return true
-	if b.get_parent() is ManaTurret:
-		return false
+	
 	# anything
 	if a.get_parent() is ManaObject:
 		return true
 	if b.get_parent() is ManaObject:
 		return false
+	
 	# fallback
 	return a
 

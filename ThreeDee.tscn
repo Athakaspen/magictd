@@ -92,19 +92,20 @@ script = SubResource("GDScript_o8bm0")
 
 [node name="WaveTimer" type="Control" parent="CanvasLayer"]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 573.0
-offset_top = 590.0
-offset_right = 613.0
-offset_bottom = 630.0
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
 script = ExtResource("11_8pmkr")
 
 [node name="Slider" type="Control" parent="CanvasLayer/WaveTimer"]
 anchors_preset = 0
-offset_left = -500.0
-offset_top = -6.0
-offset_right = -460.0
-offset_bottom = 34.0
+offset_left = 76.0
+offset_top = -66.0
+offset_right = 116.0
+offset_bottom = -26.0
 
 [node name="TimelineBlock" parent="CanvasLayer/WaveTimer/Slider" instance=ExtResource("12_ito5u")]
 layout_mode = 0
@@ -136,10 +137,10 @@ offset_bottom = 52.0
 [node name="Ticker" type="TextureRect" parent="CanvasLayer/WaveTimer"]
 modulate = Color(0, 0, 0, 1)
 layout_mode = 0
-offset_left = -509.0
-offset_top = -9.0
-offset_right = -381.0
-offset_bottom = 119.0
+offset_left = 67.0
+offset_top = -69.0
+offset_right = 195.0
+offset_bottom = 59.0
 scale = Vector2(0.08, 1)
 texture = ExtResource("12_w4fw5")
 
@@ -497,7 +498,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0586782, 0, -0.0390499)
 max_mana = 50
 
 [node name="Collector3" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.15405, 0, 5.64787)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.55901, 0, 5.04697)
 
 [node name="Collector4" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.89258, 0, 2.3839)
@@ -515,8 +516,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.9662, 0, -6.84679)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.3429, 0, 12.3441)
 
 [node name="Collector9" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.1292, 3.22721, 3.752)
-mana_per_sec = 2.0
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.0554, 3.22721, 3.58012)
+mana_per_sec = 1.0
+
+[node name="Collector15" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.0865, 3.22721, 4.22333)
+mana_per_sec = 1.0
 
 [node name="Collector10" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.66466, 0, -13.6876)
@@ -527,18 +532,22 @@ mana_per_sec = 2.0
 
 [node name="Collector" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.37516, 1.905, -7.7292)
+mana_per_sec = 1.0
 
 [node name="Collector2" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.81081, 1.905, -4.22723)
+mana_per_sec = 1.0
 
 [node name="Collector12" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.56799, 2.55794, -15.0863)
+transform = Transform3D(0.976924, -0.213587, -8.77521e-05, 0.21131, 0.966451, 0.146012, -0.0311015, -0.142662, 0.989283, -2.56799, 2.55794, -15.0863)
+mana_per_sec = 1.2
 
 [node name="Collector13" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.7105, 0, 19.5345)
 
 [node name="Collector14" parent="NetworkManager" instance=ExtResource("3_mwmbo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.2416, -1.90735e-06, 17.2977)
+mana_per_sec = 1.5
 
 [node name="EnemyHolder" type="Node3D" parent="."]
 

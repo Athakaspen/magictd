@@ -11,7 +11,7 @@ var is_inverted_x = false
 var is_inverted_y = false
 
 const CAM_DIST_MIN = 1.5
-const CAM_DIST_MAX = 4.0
+const CAM_DIST_MAX = 6.0
 const ZOOM_SPEED = 0.4
 
 @export var network_manager : NetworkManager

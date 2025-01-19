@@ -3,12 +3,12 @@ class_name ManaTurret
 
 @export var cost : int = 10
 @onready var mana_transit_pos = $ManaPoint.global_position
-@export var max_mana := 30
+@export var max_mana := 20
 
 var cur_mana := 6
 
 @export var fire_range : float = 4.0
-@export var fire_cost : int = 3
+@export var fire_cost : int = 2
 @export var fire_rate_per_sec : float = 1.6
 @export var damage : float = 10.0
 
@@ -51,7 +51,7 @@ func shoot_at(target : Enemy):
 
 func on_hit(damage_amt : int):
 	cur_mana -= damage_amt
-	if cur_mana <= -10:
+	if cur_mana <= -4:
 		Singleton.network_manager.remove_mana_object(self)
 		self.queue_free()
 

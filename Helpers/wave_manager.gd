@@ -2,10 +2,10 @@ extends Node3D
 class_name WaveManager
 
 var waves_dict : Dictionary = {
-	14:		wave("Wave 1", 2, 2),
-	28:		wave("Wave 2", 4, 4),
+	13:		wave("Wave 1", 2, 2),
+	27:		wave("Wave 2", 4, 4),
 	42:		wave("Wave 3", 4, 8),
-	56:		wave("Wave 4", 6, 12),
+	56:		wave("Wave 4", 6, 14),
 	69:		wave("Final Wave", 10, 30),
 }
 
@@ -65,10 +65,10 @@ func _process(delta):
 func get_time_scale():
 	if cur_time < waves_dict.keys().min():
 		return TIME_SCALE
-	return TIME_SCALE * (1 + (Singleton.cur_difficulty-1) * 0.4)
+	return TIME_SCALE * (1 + (Singleton.cur_difficulty-1) * 0.7)
 
 func get_spawn_scale():
-	return (1 + (Singleton.cur_difficulty-1) * 0.6)
+	return (1 + (Singleton.cur_difficulty-1) * 0.8)
 
 func wave(wave_name, duration, enemies):
 	return WaveData.new(wave_name, duration, enemies)
